@@ -1,19 +1,22 @@
 import express from "express";
+import { body } from "express-validator";
+import { inputErrorHandler } from "./modules/errorMiddleware";
+import { getAllProducts, getProduct, createProduct, updateProduct, deleteProduct } from "./controllers/product";
 
 const router = express.Router();
 
 // Product Routes
-router.get("/product");
-router.get("/product/:id");
-router.post("/product");
-router.put("/product/:id");
+router.get("/product", getAllProducts);
+router.get("/product/:id", getProduct);
+router.post("/product", body("name").isString(), inputErrorHandler, createProduct);
+router.put("/product/:id", body("name").isString(), inputErrorHandler, updateProduct);
 router.delete("/product/:id");
 
 // Update Routes
 router.get("/update");
 router.get("/update/:id");
 router.post("/update");
-router.put("/update/:id");
+router.put("/update/:id", body("title").optional, body("body").optional);
 router.delete("/update/:id");
 
 // Update Point
