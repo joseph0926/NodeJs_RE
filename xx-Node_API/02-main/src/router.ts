@@ -1,22 +1,54 @@
 import express from "express";
 import { body } from "express-validator";
 import { inputErrorHandler } from "./modules/errorMiddleware";
-import { getAllProducts, getProduct, createProduct, updateProduct, deleteProduct } from "./controllers/product";
+import {
+  getAllProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "./controllers/product";
 
 const router = express.Router();
 
-// Product Routes
+/**
+ * Product
+ */
 router.get("/product", getAllProducts);
 router.get("/product/:id", getProduct);
-router.post("/product", body("name").isString(), inputErrorHandler, createProduct);
-router.put("/product/:id", body("name").isString(), inputErrorHandler, updateProduct);
-router.delete("/product/:id");
+router.put(
+  "/product/:id",
+  body("name").isString(),
+  inputErrorHandler,
+  updateProduct
+);
+router.post(
+  "/product",
+  body("name").isString(),
+  inputErrorHandler,
+  createProduct
+);
+router.delete("/product/:id", deleteProduct);
 
-// Update Routes
+/**
+ * Update
+ */
+
 router.get("/update");
 router.get("/update/:id");
-router.post("/update");
-router.put("/update/:id", body("title").optional, body("body").optional);
+router.put(
+  "/update/:id",
+  body("title").optional(),
+  body("body").optional(),
+  body("status").isIn(["IN_PROGRESS", "SHIPPED", "DEPRECATED"]).optional(),
+  body("version").optional()
+);
+router.post(
+  "/update",
+  body("title").exists().isString(),
+  body("body").exists().isString(),
+  body("productId").exists().isString()
+);
 router.delete("/update/:id");
 
 // Update Point
