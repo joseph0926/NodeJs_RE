@@ -19,4 +19,10 @@ app.use("/api/v1", protect, router);
 app.post("/user/signup", signup);
 app.post("/user/login", login);
 
+// sync error handler
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(501).json({ message: `에러,,, ${err.message}` });
+});
+
 export default app;

@@ -13,7 +13,10 @@ export const getAllUpdates = async (req, res) => {
     return [...allUpdates, ...product.Updates];
   }, []);
 
-  res.status(201).json({ message: "모든 업데이트를 성공적으로 불러왔습니다.", data: updates });
+  res.status(201).json({
+    message: "모든 업데이트를 성공적으로 불러왔습니다.",
+    data: updates,
+  });
 };
 
 export const getUpdate = async (req, res) => {
@@ -22,13 +25,16 @@ export const getUpdate = async (req, res) => {
       id: req.params.id,
     },
   });
-  res.status(201).json({ message: "해당 업데이트를 성공적으로 불러왔습니다.", data: update });
+  res.status(201).json({
+    message: "해당 업데이트를 성공적으로 불러왔습니다.",
+    data: update,
+  });
 };
 
 export const createUpdate = async (req, res) => {
   const product = await prisma.product.findUnique({
     where: {
-      id: req.body.id,
+      id: req.body.productId,
     },
   });
   if (!product) {
@@ -36,9 +42,16 @@ export const createUpdate = async (req, res) => {
   }
 
   const update = await prisma.update.create({
-    data: req.body,
+    data: {
+      title: req.body.title,
+      body: req.body.body,
+      product: { connect: { id: product.id } },
+    },
   });
-  res.status(201).json({ message: "해당 업데이트를 성공적으로 생성하였습니다.", data: update });
+  res.status(201).json({
+    message: "해당 업데이트를 성공적으로 생성하였습니다.",
+    data: update,
+  });
 };
 
 export const updateUpdate = async (req, res) => {
@@ -62,12 +75,15 @@ export const updateUpdate = async (req, res) => {
 
   const updatedUpdate = await prisma.update.update({
     where: {
-      id: req.parmas.id,
+      id: req.params.id,
     },
     data: req.body,
   });
 
-  res.status(201).json({ message: "해당 업데이트를 성공적으로 업데이트하였습니다.", data: updatedUpdate });
+  res.status(201).json({
+    message: "해당 업데이트를 성공적으로 업데이트하였습니다.",
+    data: updatedUpdate,
+  });
 };
 
 export const deleteUpdate = async (req, res) => {
@@ -95,5 +111,8 @@ export const deleteUpdate = async (req, res) => {
     },
   });
 
-  res.status(201).json({ message: "해당 업데이트를 성공적으로 삭제하였습니다.", data: deletedUpdate });
+  res.status(201).json({
+    message: "해당 업데이트를 성공적으로 삭제하였습니다.",
+    data: deletedUpdate,
+  });
 };
