@@ -15,6 +15,9 @@
 
 import app from "./server";
 
+process.on("uncaughtException", () => {});
+process.on("unhandledRejection", () => {});
+
 app.listen(5000, () => {
   console.log("서버가 포트번호 5000에서 정상 작동중입니다");
 });

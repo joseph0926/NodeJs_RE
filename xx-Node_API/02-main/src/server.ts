@@ -19,10 +19,17 @@ app.use("/api/v1", protect, router);
 app.post("/user/signup", signup);
 app.post("/user/login", login);
 
-// sync error handler
+// error handler
 app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(501).json({ message: `에러,,, ${err.message}` });
+  if (err.type === "auth") {
+    res.status(401).json({ message: "인증 오류" });
+  } else if (err.type === "input") {
+    res.status(400).json({ message: "유효하지 않은 입력값입니다" });
+  } else {
+    res
+      .status(500)
+      .json({ message: `에러가 발생하였습니다,,, ${err.message}` });
+  }
 });
 
 export default app;

@@ -10,7 +10,12 @@ export const getAllProducts = async (req, res) => {
     },
   });
 
-  res.status(201).json({ message: "모든 제품을 성공적으로 불러왔습니다.", data: user.products });
+  res
+    .status(201)
+    .json({
+      message: "모든 제품을 성공적으로 불러왔습니다.",
+      data: user.products,
+    });
 };
 
 export const getProduct = async (req, res) => {
@@ -23,18 +28,26 @@ export const getProduct = async (req, res) => {
     },
   });
 
-  res.status(201).json({ message: "제품을 성공적으로 불러왔습니다.", data: product });
+  res
+    .status(201)
+    .json({ message: "제품을 성공적으로 불러왔습니다.", data: product });
 };
 
-export const createProduct = async (req, res) => {
-  const product = await prisma.product.create({
-    data: {
-      name: req.body.name,
-      belongsToId: req.user.id,
-    },
-  });
+export const createProduct = async (req, res, next) => {
+  try {
+    const product = await prisma.product.create({
+      data: {
+        name: req.body.name,
+        belongsToId: req.user.id,
+      },
+    });
 
-  res.status(201).json({ message: "제품을 성공적으로 생성하였습니다.", data: product });
+    res
+      .status(201)
+      .json({ message: "제품을 성공적으로 생성하였습니다.", data: product });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const updateProduct = async (req, res) => {
@@ -48,7 +61,9 @@ export const updateProduct = async (req, res) => {
     },
   });
 
-  res.status(201).json({ message: "제품을 성공적으로 업데이트하였습니다.", data: updated });
+  res
+    .status(201)
+    .json({ message: "제품을 성공적으로 업데이트하였습니다.", data: updated });
 };
 
 export const deleteProduct = async (req, res) => {
@@ -59,5 +74,7 @@ export const deleteProduct = async (req, res) => {
     },
   });
 
-  res.status(201).json({ message: "제품을 성공적으로 삭제하였습니다.", data: deleted });
+  res
+    .status(201)
+    .json({ message: "제품을 성공적으로 삭제하였습니다.", data: deleted });
 };
