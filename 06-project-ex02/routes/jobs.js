@@ -1,16 +1,11 @@
-const express = require('express')
+const express = require("express");
+const testUser = require("../middleware/test-user");
 
-const router = express.Router()
-const {
-  createJob,
-  deleteJob,
-  getAllJobs,
-  updateJob,
-  getJob,
-} = require('../controllers/jobs')
+const router = express.Router();
+const { createJob, deleteJob, getAllJobs, updateJob, getJob, showStats } = require("../controllers/jobs");
 
-router.route('/').post(createJob).get(getAllJobs)
+router.route("/").post(testUser, createJob).get(getAllJobs);
+router.route("/stats").get(showStats);
+router.route("/:id").get(getJob).delete(testUser, deleteJob).patch(testUser, updateJob);
 
-router.route('/:id').get(getJob).delete(deleteJob).patch(updateJob)
-
-module.exports = router
+module.exports = router;
